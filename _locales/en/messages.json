@@ -202,6 +202,9 @@
   "fq.printAllowDuplicates": {
     "message": "Allow Duplicates"
   },
+  "fq.purgeMessage": {
+    "message": "Purge Message"
+  },
   "fq.printTools": {
     "message": "Use PrintingTools NG for printing"
   },

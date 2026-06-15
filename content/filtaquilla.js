@@ -114,6 +114,7 @@
     markUnreadEnabled = false,
     markRepliedEnabled = false,
     copyAsReadEnabled = false,
+    purgeMessageEnabled = false,
     launchFileEnabled = false,
     runFileEnabled = false,
     runFileUnicode = false,
@@ -465,6 +466,32 @@
         },
       };
     })(); // end copyAsRead
+
+    // purgeMessage action
+    self.purgeMessage = {
+      id: "filtaquilla@mesquilla.com#purgeMessage",
+      name: util.getBundleString("fq.purgeMessage"),
+      applyAction: function (aMsgHdrs, _aActionValue, _aListener, _aType, aMsgWindow) {
+        if (aMsgHdrs.length > 0) {
+          aMsgHdrs[0].folder.deleteMessages(aMsgHdrs, aMsgWindow, true, false, null, false);
+        }
+      },
+      apply: function (aMsgHdrs, aActionValue, aListener, aType, aMsgWindow) {
+        let msgHdrs = [];
+        for (var i = 0; i < aMsgHdrs.length; i++) {
+          msgHdrs.push(aMsgHdrs.queryElementAt(i, Ci.nsIMsgDBHdr));
+        }
+        this.applyAction(msgHdrs, aActionValue, aListener, aType, aMsgWindow);
+      },
+      isValidForType: function (_type, _scope) {
+        return purgeMessageEnabled;
+      },
+      validateActionValue: function (_value, _folder, _type) {
+        return null;
+      },
+      allowDuplicates: false,
+      needsBody: false,
+    };
 
     // launch file
     self.launchFile = {
@@ -2425,6 +2452,10 @@
     } catch {;}
 
     try {
+      purgeMessageEnabled = prefs.getBoolPref("purgeMessage.enabled");
+    } catch {;}
+
+    try {
       launchFileEnabled = prefs.getBoolPref("launchFile.enabled");
     } catch {;}
 
@@ -2563,6 +2594,7 @@
     filterService.addCustomAction(self.markUnread);
     filterService.addCustomAction(self.markReplied);
     filterService.addCustomAction(self.copyAsRead);
+    filterService.addCustomAction(self.purgeMessage);
     filterService.addCustomAction(self.launchFile);
     filterService.addCustomAction(self.runFile);
     filterService.addCustomAction(self.trainAsJunk);

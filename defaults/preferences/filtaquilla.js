@@ -16,6 +16,7 @@ pref("extensions.filtaquilla.markUnread.enabled", false);
 pref("extensions.filtaquilla.markReplied.enabled", false);
 pref("extensions.filtaquilla.noBiff.enabled", false);
 pref("extensions.filtaquilla.copyAsRead.enabled", false);
+pref("extensions.filtaquilla.purgeMessage.enabled", false);
 pref("extensions.filtaquilla.lastUpdateMessage", "0");
 pref("extensions.filtaquilla.launchFile.enabled", true);
 pref("extensions.filtaquilla.runFile.enabled", false);

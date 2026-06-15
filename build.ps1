@@ -1,5 +1,5 @@
 param([string]$Topdir=(Split-Path $script:MyInvocation.MyCommand.Path),
-      [string]$Zip = "C:\Program Files\7-zip\7z",
+      [string]$Zip = "7z",
       [switch]$IncrementRevision)
 
 # Parameters:
