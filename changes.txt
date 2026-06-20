@@ -108,7 +108,7 @@
 
 
   
-6.0 - 03/12/2025
+6.0 - published 03.12.2025
 
 Increased strict_min_version to 140.0.
 
@@ -121,23 +121,10 @@ Increased strict_min_version to 140.0.
 *  Removed legacy settings XUL dialog options.xhtml. [issue #379]
 *  Added dedicated change log menu item. Added version numbers [issue #379]
 
-6.1 - 20/01/2026
+6.1 - WIP
 **Bug Fixes**
 *    "Play sound" file picker - doesn't work when path textbox is empty [issue #380]
-*    incompatible with Tb147 - bumped strict_max_ver to 149.* [issue #385]
- 
-6.2 - WIP
-*    Increased strict_max_version to 153.*.
-*    Added tool tip to regular expression option for case insensitive matching
-*    fix regex pseudo-flag "c" - which forces case sensitive behavior overriding "Regex case-insensitive Match"
-*    Made regex options panel theme compatible using --box-text-color, --richlist-button-background, --border-color
-*    header regex: headers like "in-reply-to" are not exposed and do not work [issue #395]
-*    Prepend / Append Date to subject [issue #398] 
-*              Added %date()% switch for subject prefix / append, for a list of letters you can use in the format string 
-*              check https://smarttemplates.quickfolders.org/variables.html#customDates
-*              Example: Prefix Subject:  `%date("Y-m-d")% [Important] 
-
-
+*    "Purge Message" filter action did not complete reliably for Gmail IMAP accounts; the action now waits for the purge and expunges IMAP folders.
 
 ======================================
 

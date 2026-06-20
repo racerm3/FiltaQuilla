@@ -471,9 +471,41 @@
     self.purgeMessage = {
       id: "filtaquilla@mesquilla.com#purgeMessage",
       name: util.getBundleString("fq.purgeMessage"),
-      applyAction: function (aMsgHdrs, _aActionValue, _aListener, _aType, aMsgWindow) {
-        if (aMsgHdrs.length > 0) {
-          aMsgHdrs[0].folder.deleteMessages(aMsgHdrs, aMsgWindow, true, false, null, false);
+      applyAction: function (aMsgHdrs, _aActionValue, aListener, _aType, aMsgWindow) {
+        let finish = function (status) {
+          if (aListener?.onStopCopy) {
+            aListener.onStopCopy(status);
+          } else if (aListener?.OnStopCopy) {
+            aListener.OnStopCopy(status);
+          }
+          return status;
+        };
+
+        if (!aMsgHdrs.length) {
+          return finish(Cr.NS_OK);
+        }
+
+        let srcFolder = aMsgHdrs[0].folder;
+        try {
+          srcFolder.deleteMessages(aMsgHdrs, aMsgWindow, true, false, null, false);
+
+          if (srcFolder.URI.substr(0, 4) == "imap") {
+            srcFolder.compact(
+              {
+                onStartRunningUrl: function (_url) {},
+                onStopRunningUrl: function (_url, status) {
+                  finish(status);
+                },
+              },
+              aMsgWindow
+            );
+            return Cr.NS_OK;
+          }
+
+          return finish(Cr.NS_OK);
+        } catch (ex) {
+          util.logException("FiltaQuilla.purgeMessage failed.", ex);
+          return finish(Cr.NS_ERROR_FAILURE);
         }
       },
       apply: function (aMsgHdrs, aActionValue, aListener, aType, aMsgWindow) {
@@ -481,7 +513,7 @@
         for (var i = 0; i < aMsgHdrs.length; i++) {
           msgHdrs.push(aMsgHdrs.queryElementAt(i, Ci.nsIMsgDBHdr));
         }
-        this.applyAction(msgHdrs, aActionValue, aListener, aType, aMsgWindow);
+        return this.applyAction(msgHdrs, aActionValue, aListener, aType, aMsgWindow);
       },
       isValidForType: function (_type, _scope) {
         return purgeMessageEnabled;
@@ -491,6 +523,7 @@
       },
       allowDuplicates: false,
       needsBody: false,
+      isAsync: true,
     };
 
     // launch file
